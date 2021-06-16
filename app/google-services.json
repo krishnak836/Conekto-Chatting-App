@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "700631654647",
+    "project_id": "my-application-ceaa9",
+    "storage_bucket": "my-application-ceaa9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700631654647:android:7f1c3e673926c3fc3b73f2",
+        "android_client_info": {
+          "package_name": "com.example.Conekto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700631654647-r8o3h005q54c29mb9en4nv16q51d5fnc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSX2HADdkXwWJgn0PzU7Wov6y_qX6No1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700631654647-r8o3h005q54c29mb9en4nv16q51d5fnc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
