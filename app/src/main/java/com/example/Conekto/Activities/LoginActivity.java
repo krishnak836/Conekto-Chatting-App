@@ -42,7 +42,10 @@ public class LoginActivity extends AppCompatActivity {
         forgetPassword = findViewById(R.id.txt_forget);
         mFirebaseAuth = FirebaseAuth.getInstance();
         Window window = this.getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        window.setStatusBarColor(LoginActivity.this.getColor(android.R.color.transparent));
+        window.setBackgroundDrawableResource(R.drawable.login_bg);
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

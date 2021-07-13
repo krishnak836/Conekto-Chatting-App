@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextPaint;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -49,8 +51,10 @@ public class CheckingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        window.setStatusBarColor(CheckingActivity.this.getColor(android.R.color.white));
         setContentView(R.layout.activity_checking);
         checking_layout = findViewById(R.id.checking_layout);
         textView = findViewById(R.id.app_name);
