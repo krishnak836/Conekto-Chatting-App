@@ -3,12 +3,12 @@ An Android chatting App programmed in JAVA Language.
 Tools, database and library used: Android Studio, Figma, Canva, Firebase, Shared Preferences, Glide, CircleImageView
 
 Features:
-1. Explore users of app in users list and start to communicate with them.
-2. You can see your Recent chats in chatlist.
-3. You can see who is onine in chatlist and also in chat.
+1. Explore users of the app in the user's list and start to communicate with them.
+2. You can see your Recent chats in the chat list.
+3. You can see who is online in the chat list and also in chat.
 4. Timestamp for every message in chat.
-5. Delivered indication on successful delivery of message in chat.
-6. You can update your profile image from profile section.
+5. Delivered indication on the successful delivery of the message in chat.
+6. You can update your profile image from the profile section.
 
 
 Here are some screenshots of app.
