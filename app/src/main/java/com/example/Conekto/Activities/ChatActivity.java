@@ -188,6 +188,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                     messageAdapter = new MessageAdapter(ChatActivity.this, messages, imageUrl, name);
                     rv.setAdapter(messageAdapter);
+                    rv.scrollToPosition(rv.getAdapter().getItemCount() - 1);
                 }
             }
 
