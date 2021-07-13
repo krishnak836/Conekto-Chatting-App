@@ -1,7 +1,8 @@
 # Conekto-Messenger
+An Android chatting App programmed in JAVA Language.
+Tools, database and library used: Android Studio, Figma, Canva, Firebase, Shared Preferences, Glide, CircleImageView
 
-An Android chatting App using Firebase with the following features:
-
+Features:
 1. Explore users of app in users list and start to communicate with them.
 2. You can see your Recent chats in chatlist.
 3. You can see who is onine in chatlist and also in chat.
