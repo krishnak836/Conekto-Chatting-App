@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.Conekto.Activities.ChatActivity;
-import com.example.Conekto.Activities.UserProfileActivity;
 import com.example.Conekto.Models.UsersDetailsModel;
 import com.example.Conekto.R;
 
@@ -75,13 +74,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("name", cInfo.getFullname());
                 intent.putExtra("uid", cInfo.getUid());
-                context.startActivity(intent);
-            }
-        });
-        ChatListViewHolder.vedt_profileimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, UserProfileActivity.class);
                 context.startActivity(intent);
             }
         });

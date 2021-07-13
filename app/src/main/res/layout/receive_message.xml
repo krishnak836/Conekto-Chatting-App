@@ -28,7 +28,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
         android:contentDescription="User Icon"
-        android:src="@drawable/profile" />
+        android:src="@drawable/ic_person" />
 
     <TextView
         android:id="@+id/text_gchat_user_rec"
@@ -37,7 +37,7 @@
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@id/image_gchat_profile_rec"
         android:text="Krishna"
-        android:textColor="#eef1f6"
+        android:textColor="@color/status_bg"
         android:textSize="12sp" />
 
     <androidx.cardview.widget.CardView
@@ -82,7 +82,7 @@
         android:layout_alignBaseline="@+id/text_gchat_user_rec"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/text_gchat_user_rec"
-        android:textColor="#eef1f6"
+        android:textColor="@color/status_bg"
         android:textSize="10sp" />
 
 </RelativeLayout>

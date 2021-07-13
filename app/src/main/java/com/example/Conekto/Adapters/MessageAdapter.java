@@ -8,14 +8,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.Conekto.Models.MessageModel;
-import com.example.Conekto.Models.UsersDetailsModel;
 import com.example.Conekto.R;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -76,13 +73,22 @@ public class MessageAdapter extends RecyclerView.Adapter {
             SentViewHolder sentViewHolder = (SentViewHolder) holder;
             sentViewHolder.vchat_msgTime_send.setText(cInfo.getTime());
             sentViewHolder.vchat_msg_send.setText(cInfo.getMessage());
+            if (position == messageModels.size() - 1) {
+                if (cInfo.isSeen()) {
+                    ((SentViewHolder) holder).isSeen.setText("Seen");
+                } else {
+                    ((SentViewHolder) holder).isSeen.setText("Delivered");
+                }
+            } else {
+                ((SentViewHolder) holder).isSeen.setVisibility(View.GONE);
+            }
         } else {
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.vchat_msg_rec.setText(cInfo.getMessage());
             receiveViewHolder.vchat_username.setText(name);
             receiveViewHolder.vchat_msgTime_rec.setText(cInfo.getTime());
             if (ImgUrl.equals("default")) {
-                receiveViewHolder.vedt_profileimg.setImageResource(R.drawable.profile);
+                receiveViewHolder.vedt_profileimg.setImageResource(R.drawable.ic_person);
             } else {
                 Glide.with(context).load(ImgUrl).into(receiveViewHolder.vedt_profileimg);
             }
@@ -99,21 +105,15 @@ public class MessageAdapter extends RecyclerView.Adapter {
         protected TextView vchat_msg_send;
         protected TextView vchat_msgTime_send;
         protected CardView vmessage_card_send;
+        protected TextView isSeen;
 
         public SentViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             vchat_msg_send = (TextView) itemView.findViewById(R.id.text_gchat_message_send);
             vchat_msgTime_send = (TextView) itemView.findViewById(R.id.text_gchat_timestamp_send);
             vmessage_card_send = (CardView) itemView.findViewById(R.id.card_gchat_message_send);
-//            vedt_profileimg.setOnClickListener(this);
-//            vmessage_card_send.setOnClickListener(this);
+            isSeen = (TextView) itemView.findViewById(R.id.send_status);
         }
-
-
-//        @Override
-//        public void onClick(View v) {
-//
-//        }
     }
 
     public static class ReceiveViewHolder extends RecyclerView.ViewHolder {
@@ -130,15 +130,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             vchat_msg_rec = itemView.findViewById(R.id.text_gchat_message_rec);
             vchat_msgTime_rec = itemView.findViewById(R.id.text_gchat_timestamp_rec);
             vmessage_card_rec = itemView.findViewById(R.id.card_gchat_message_rec);
-//            vedt_profileimg.setOnClickListener(this);
-//            vmessage_card_rec.setOnClickListener(this);
         }
-
-//        @Override
-//        public void onClick(View v) {
-//            if (mItemClickListener != null) {
-//                mItemClickListener.onItemClickListener(v, getAdapterPosition());
-//            }
     }
 }
 

@@ -1,15 +1,15 @@
 package com.example.Conekto.Fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.Conekto.Adapters.UsersAdapter;
 import com.example.Conekto.Models.ChatListModel;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 public class ChatListFragment extends Fragment {
     private UsersAdapter usersAdapter;
     View view;
+    LinearLayout no_data_layout;
     private ArrayList<UsersDetailsModel> usersDetailsList;
     FirebaseUser firebaseUser;
     DatabaseReference reference;
@@ -47,6 +48,7 @@ public class ChatListFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_chat_list, container, false);
         rv = view.findViewById(R.id.chat_list_rv);
+        no_data_layout = view.findViewById(R.id.no_data);
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,22 +76,24 @@ public class ChatListFragment extends Fragment {
     private void chatList() {
         // all recent chats
         usersDetailsList = new ArrayList<>();
-        reference=FirebaseDatabase.getInstance().getReference("Users");
+        reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 usersDetailsList.clear();
-                for(DataSnapshot snapshot1:snapshot.getChildren()) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     UsersDetailsModel usersDetailsModel = snapshot1.getValue(UsersDetailsModel.class);
-                    for(ChatListModel chatList: chatList){
-                        if(usersDetailsModel.getUid().equals(chatList.getId())){
+                    for (ChatListModel chatList : chatList) {
+                        if (usersDetailsModel.getUid().equals(chatList.getId())) {
                             usersDetailsList.add(usersDetailsModel);
                         }
-
                     }
                 }
-                usersAdapter =new UsersAdapter(usersDetailsList, getContext(),true);
-                rv.setAdapter(usersAdapter);
+                if (!usersDetailsList.isEmpty()) {
+                    usersAdapter = new UsersAdapter(usersDetailsList, getContext(), true);
+                    rv.setAdapter(usersAdapter);
+                    no_data_layout.setVisibility(View.GONE);
+                }
             }
 
             @Override

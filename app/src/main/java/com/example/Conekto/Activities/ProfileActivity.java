@@ -1,9 +1,5 @@
 package com.example.Conekto.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -15,6 +11,10 @@ import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.Conekto.Models.UsersDetailsModel;
@@ -49,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     DatabaseReference reference;
     StorageReference storageReference;
+    TextView backbtn;
     private static final int PROFILE_IMG_REQUEST = 1;
     private Uri ImageUri;
     private StorageTask<UploadTask.TaskSnapshot> ImageUpload;
@@ -67,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         profile_email = findViewById(R.id.profile_email);
         profile_image = findViewById(R.id.img);
+        backbtn = findViewById(R.id.back_profile);
         edt_image = findViewById(R.id.edt_image);
         profile_name = findViewById(R.id.profile_name);
         storageReference = FirebaseStorage.getInstance().getReference("Uploads");
@@ -80,11 +82,10 @@ public class ProfileActivity extends AppCompatActivity {
                 profile_name.setText(usersDetailsModel.getFullname());
                 profile_email.setText(usersDetailsModel.getEmail());
                 if (usersDetailsModel.getImage().equals("default")) {
-                    profile_image.setImageResource(R.drawable.profile);
+                    profile_image.setImageResource(R.drawable.ic_person);
                 } else {
                     Glide.with(getApplicationContext()).load(usersDetailsModel.getImage()).into(profile_image);
                 }
-
             }
 
             @Override
@@ -96,6 +97,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ImageSelection();
+            }
+        });
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, DashboardActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

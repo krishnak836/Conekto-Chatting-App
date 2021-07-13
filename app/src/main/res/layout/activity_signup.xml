@@ -5,7 +5,7 @@
     android:id="@+id/login_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bgtheme"
+    android:background="@drawable/login_bg"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activities.SignUpActivity">
@@ -14,36 +14,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/rel_img"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:orientation="vertical"
-            tools:ignore="MissingConstraints">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_register"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="60dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintBottom_toTopOf="@+id/layout_credentials"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/img_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="20dp"
-                android:src="@drawable/ic_register" />
+        <TextView
+            android:id="@+id/info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/signup"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toTopOf="@+id/layout_credentials"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/info_text"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="30dp"
-                android:gravity="center_vertical"
-                android:text="Create your Account"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-
-        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/layout_credentials"
@@ -53,7 +46,9 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="50dp"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/rel_img">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_register">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_fullname"
@@ -74,6 +69,7 @@
                     android:id="@+id/et_fullname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:cursorVisible="true"
                     android:hint="Enter Your Fullname"
                     android:singleLine="true"
@@ -94,7 +90,7 @@
                 app:boxCornerRadiusTopStart="20dp"
                 app:endIconMode="clear_text"
                 app:hintTextColor="@color/black"
-                app:startIconDrawable="@drawable/ic_chats"
+                app:startIconDrawable="@drawable/ic_mail"
                 app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -123,7 +119,7 @@
                 app:endIconMode="password_toggle"
                 app:fontFamily="serif"
                 app:hintTextColor="@color/black"
-                app:startIconDrawable="@drawable/ic_search"
+                app:startIconDrawable="@drawable/ic_password"
                 app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -150,7 +146,7 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Sign Up "
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
@@ -161,7 +157,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="Already have an account? Log in"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/btnSubmit"
                 app:layout_constraintStart_toStartOf="@+id/btnSubmit"

@@ -52,43 +52,24 @@ public class UserslistFragment extends Fragment {
         users = new ArrayList<>();
 
         ReadUsers();
-//        db.collection("Users")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-////                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                                String fullname = Objects.requireNonNull(document.getData().get("fullname")).toString();
-//                                String uid = document.getId();
-//                                UsersDetailsModel usersDetailsModel = new UsersDetailsModel(uid, fullname, "NoImage");
-//                                users.add(usersDetailsModel);
-//                            }
-//                            usersAdapter.notifyDataSetChanged();
-//                        } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
         return view;
     }
 
     private void ReadUsers() {
-        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference  reference= FirebaseDatabase.getInstance().getReference("Users");
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 users.clear();
-                for(DataSnapshot snapshot1: snapshot.getChildren()){
-                    UsersDetailsModel user=snapshot1.getValue(UsersDetailsModel.class);
-                    assert user!=null;
-                    if(!user.getUid().equals(firebaseUser.getUid())){
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    UsersDetailsModel user = snapshot1.getValue(UsersDetailsModel.class);
+                    assert user != null;
+                    if (!user.getUid().equals(firebaseUser.getUid())) {
                         System.out.println(firebaseUser.getUid());
                         users.add(user);
                     }
-                    usersAdapter=new UsersAdapter(users,getContext(),false);
+                    usersAdapter = new UsersAdapter(users, getContext(), false);
                     rv.setAdapter(usersAdapter);
                 }
             }
@@ -98,14 +79,5 @@ public class UserslistFragment extends Fragment {
 
             }
         });
-    }
-
-    public void loadFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.framelayout_container, fragment);
-        fragmentTransaction.addToBackStack("DashboardActivity");
-        fragmentTransaction.commit();
-//        debugMode.ourInstance.printInLog(getContext(), "Fragment", "Inside " + fragment, "Message");
     }
 }

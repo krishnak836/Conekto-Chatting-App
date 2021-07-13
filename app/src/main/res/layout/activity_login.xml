@@ -4,39 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bgtheme"
+    android:background="@drawable/login_bg"
     tools:context=".Activities.LoginActivity">
 
-            <RelativeLayout
-                android:id="@+id/rel_img"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:orientation="vertical"
-                tools:ignore="MissingConstraints">
 
-                <ImageView
-                    android:id="@+id/img_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="20dp"
-                    android:src="@drawable/ic_register" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_register"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintBottom_toTopOf="@+id/info_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
 
-                <TextView
-                    android:id="@+id/info_text"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="30dp"
-                    android:gravity="center_vertical"
-                    android:text="Welcome!\nPlease Login with your credentials."
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+    <TextView
+        android:id="@+id/info_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/login"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_credentials"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-
-            </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/layout_credentials"
@@ -48,7 +42,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintVertical_bias="0.734">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_email"
@@ -63,7 +57,7 @@
             app:boxCornerRadiusTopStart="20dp"
             app:endIconMode="clear_text"
             app:hintTextColor="@color/black"
-            app:startIconDrawable="@drawable/ic_chats"
+            app:startIconDrawable="@drawable/ic_mail"
             app:startIconTint="@color/colorPrimary">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -92,7 +86,7 @@
             app:endIconMode="password_toggle"
             app:fontFamily="serif"
             app:hintTextColor="@color/black"
-            app:startIconDrawable="@drawable/ic_search"
+            app:startIconDrawable="@drawable/ic_password"
             app:startIconTint="@color/colorPrimary">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -125,7 +119,7 @@
                 android:layout_marginBottom="20dp"
                 android:padding="10dp"
                 android:text="Forget Password"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 app:fontFamily="serif" />
         </LinearLayout>
@@ -139,7 +133,7 @@
             android:backgroundTint="@color/colorPrimary"
             android:gravity="center_horizontal|center_vertical"
             android:text="Login "
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="18dp"
             android:textStyle="bold" />
 
@@ -150,7 +144,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:text="Don't have an account? Sign up"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/btnSubmit"
             app:layout_constraintStart_toStartOf="@+id/btnSubmit"

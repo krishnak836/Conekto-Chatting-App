@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,9 +40,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
     AppBarLayout appBarLayout;
-    ImageView attachment;
     String name, receiverId;
-    TextView txtname;
+    TextView txtname, user_status;
     CircleImageView imageView;
     ImageView sendBtn;
     RecyclerView rv;
@@ -48,17 +50,22 @@ public class ChatActivity extends AppCompatActivity {
     MessageAdapter messageAdapter;
     DatabaseReference db_ref;
     FirebaseUser firebaseUser;
+    ImageView backbtn;
+    ValueEventListener deliveryListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        appBarLayout = findViewById(R.id.app_bar);
-        appBarLayout.setBackground(null);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        window.setStatusBarColor(ChatActivity.this.getColor(android.R.color.white));
         sendBtn = findViewById(R.id.sendBtn);
         edtmessageBox = findViewById(R.id.messageBox);
-        attachment = findViewById(R.id.attachment);
+        backbtn = findViewById(R.id.back_chat);
         txtname = findViewById(R.id.name);
+        user_status = findViewById(R.id.user_status);
         imageView = findViewById(R.id.profile_image);
         rv = findViewById(R.id.chat_rv);
         rv.setHasFixedSize(true);
@@ -74,10 +81,11 @@ public class ChatActivity extends AppCompatActivity {
                 UsersDetailsModel usersDetailsModel = snapshot.getValue(UsersDetailsModel.class);
                 assert usersDetailsModel != null;
                 txtname.setText(usersDetailsModel.getFullname());
+                user_status.setText(usersDetailsModel.getStatus());
                 if (usersDetailsModel.getImage().equals("default")) {
-                    imageView.setImageResource(R.drawable.profile);
+                    imageView.setImageResource(R.drawable.ic_person);
                 } else {
-                    Glide.with(ChatActivity.this)
+                    Glide.with(getApplicationContext())
                             .load(usersDetailsModel.getImage()).into(imageView);
                 }
                 ReadMessages(firebaseUser.getUid(), receiverId, usersDetailsModel.getImage(), usersDetailsModel.getFullname());
@@ -100,9 +108,35 @@ public class ChatActivity extends AppCompatActivity {
                 edtmessageBox.setText("");
             }
         });
-        attachment.setOnClickListener(new View.OnClickListener() {
+        backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(ChatActivity.this, DashboardActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        seenMessage(receiverId);
+    }
+
+    private void seenMessage(String receiverId) {
+        db_ref = FirebaseDatabase.getInstance().getReference("Chats");
+        deliveryListener = db_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    MessageModel chat = snapshot1.getValue(MessageModel.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(receiverId)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("isSeen", true);
+                        snapshot1.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
             }
         });
     }
@@ -117,6 +151,7 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put("receiver", receiverId);
         hashMap.put("message", message);
         hashMap.put("time", time);
+        hashMap.put("isSeen", false);
         db_ref.child("Chats").push().setValue(hashMap);
 
 // Adding user to latest chat
@@ -179,12 +214,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        db_ref.removeEventListener(deliveryListener);
         CheckingForStatus("offline");
     }
-
-//    public String getCurrentTime() {
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//        Date date = new Date();
-//        return formatter.format(date);
-//    }
 }

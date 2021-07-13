@@ -7,21 +7,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
+import com.example.Conekto.Fragments.AboutFragment;
 import com.example.Conekto.Fragments.ChatListFragment;
 import com.example.Conekto.Fragments.UserslistFragment;
 import com.example.Conekto.Models.UsersDetailsModel;
 import com.example.Conekto.R;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,17 +36,15 @@ import java.util.HashMap;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DashboardActivity extends AppCompatActivity {
-    FloatingActionButton fab;
     BottomNavigationView bottomNavigationview;
-    AppBarLayout appBarLayout;
     FirebaseUser firebaseUser;
     DatabaseReference reference;
-    Toolbar toolbar;
     CircleImageView profile_option;
+    TextView btnSignOut;
 
-    final Fragment fragment1 = new UserslistFragment();
-    final Fragment fragment2 = new ChatListFragment();
-    //    final Fragment fragment3 = new NotificationsFragment();
+    final Fragment fragment1 = new ChatListFragment();
+    final Fragment fragment2 = new UserslistFragment();
+    final Fragment fragment3 = new AboutFragment();
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active = fragment1;
 
@@ -56,13 +53,12 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        fab = findViewById(R.id.fab);
         profile_option = findViewById(R.id.profile_option);
+        btnSignOut = findViewById(R.id.signout);
         bottomNavigationview = findViewById(R.id.bottomNavigationView);
         bottomNavigationview.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bottomNavigationview.setBackground(null);
-        bottomNavigationview.getMenu().getItem(2).setEnabled(false);
-//        fm.beginTransaction().add(R.id.main_container, fragment3, "3").hide(fragment3).commit();
+        fm.beginTransaction().add(R.id.framelayout, fragment3, "3").hide(fragment3).commit();
         fm.beginTransaction().add(R.id.framelayout, fragment2, "2").hide(fragment2).commit();
         fm.beginTransaction().add(R.id.framelayout, fragment1, "1").commit();
         Window window = this.getWindow();
@@ -76,9 +72,13 @@ public class DashboardActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                UsersDetailsModel users = snapshot.getValue(UsersDetailsModel.class);
-                assert users != null;
-//                Toast.makeText(DashboardActivity.this, "User Login" + users.getFullname(), Toast.LENGTH_SHORT).show();
+                UsersDetailsModel usersDetailsModel = snapshot.getValue(UsersDetailsModel.class);
+                if (usersDetailsModel.getImage().equals("default")) {
+                    profile_option.setImageResource(R.drawable.ic_person);
+                } else {
+                    Glide.with(getApplicationContext()).load(usersDetailsModel.getImage()).into(profile_option);
+                }
+
             }
 
             @Override
@@ -93,6 +93,24 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("status", "offline");
+                reference.updateChildren(hashMap);
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(DashboardActivity.this, LoginActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                SharedPreferences settings = getSharedPreferences("User", 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean("LoggedIn", false);
+                editor.commit();
+            }
+        });
     }
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -101,32 +119,20 @@ public class DashboardActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.miHome:
+                case R.id.chats:
                     fm.beginTransaction().hide(active).show(fragment1).commit();
                     active = fragment1;
                     return true;
 
-                case R.id.miProfile:
+                case R.id.Users:
                     fm.beginTransaction().hide(active).show(fragment2).commit();
                     active = fragment2;
                     return true;
 
-                case R.id.miSettings:
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(DashboardActivity.this, LoginActivity.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    SharedPreferences settings = getSharedPreferences("User", 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean("LoggedIn", false);
-                    editor.commit();
+                case R.id.About:
+                    fm.beginTransaction().hide(active).show(fragment3).commit();
+                    active = fragment3;
                     return true;
-
-//                    case R.id.navigation_notifications:
-//                        fm.beginTransaction().hide(active).show(fragment3).commit();
-//                        active = fragment3;
-//                        return true;
             }
             return false;
         }
@@ -156,53 +162,3 @@ public class DashboardActivity extends AppCompatActivity {
         CheckingForStatus("offline");
     }
 }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle item selection
-//        switch (item.getItemId()) {
-//            case R.id.profile:
-//                loadFragment(new ChatlistFragment());
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
-//    private void loadFragment(Fragment fragment) {
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.framelayout, fragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-//    }
-//}
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//    }
-////
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-////        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//}
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//            return true;
-//        }
-//
-//    }

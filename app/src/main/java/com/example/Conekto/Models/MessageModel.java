@@ -4,18 +4,18 @@ public class MessageModel {
     private String sender;
     private String receiver;
     private String message;
-    private String status;
     private String time;
+    private boolean isSeen;
 
     public MessageModel() {
     }
 
-    public MessageModel(String sender_id, String receiver_id, String message, String time, String status) {
+    public MessageModel(String sender_id, String receiver_id, String message, String time, boolean isSeen) {
         this.sender = sender_id;
         this.receiver = receiver_id;
         this.message = message;
         this.time = time;
-        this.status = status;
+        this.isSeen = isSeen;
     }
 
     public String getMessage() {
@@ -24,15 +24,6 @@ public class MessageModel {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getReceiver() {
@@ -57,5 +48,13 @@ public class MessageModel {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public boolean isSeen() {
+        return isSeen;
+    }
+
+    public void setSeen(boolean seen) {
+        isSeen = seen;
     }
 }

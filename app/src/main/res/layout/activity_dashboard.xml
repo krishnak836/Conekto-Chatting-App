@@ -38,16 +38,17 @@
                     android:id="@+id/profile_option"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/profile"
+                    android:src="@drawable/ic_person"
                     app:civ_border_color="@color/black"
                     app:civ_border_width="2dp" />
 
                 <TextView
+                    android:id="@+id/signout"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end"
                     android:layout_marginEnd="10dp"
-                    android:background="@drawable/ic_three_line"
+                    android:background="@drawable/ic_signout"
                     android:backgroundTint="@color/black" />
 
             </Toolbar>
@@ -87,14 +88,5 @@
             app:menu="@menu/menu_main" />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorPrimary"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/ic_add"
-        app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

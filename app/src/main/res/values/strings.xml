@@ -1,16 +1,16 @@
 <resources>
-    <string name="app_name">Conekto</string>
+    <string name="app_name">Conekto Messenger</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="todo">TODO</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="splash_msg">An Instant messaging App, find out the users of the Conekto messenger App and connect with them in Realtime. Explore the Users List and start to communicate with the users. Get to know who is online with the Online Indication mark in Chats list when someone is online.</string>
+    <string name="continue_txt">Continue</string>
+    <string name="login">Please login with your credentials.</string>
+    <string name="signup">Please enter your details.</string>
+    <string name="about_txt">Thanks for using this App. Hello User, I am Krishna Kumar, an experienced Android Developer. Please let me know a few points of feedback that you want to go over in the review.</string>
+    <string name="copyright">Copyright ©2021 All rights reserved.</string>
 </resources>

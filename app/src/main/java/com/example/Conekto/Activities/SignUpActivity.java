@@ -3,6 +3,7 @@ package com.example.Conekto.Activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,11 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,8 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     Task<Void> reference;
     ProgressDialog custom_progress_dialog;
-//    FirebaseFirestore mFirebaseStore;
-
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +47,6 @@ public class SignUpActivity extends AppCompatActivity {
         txtLoginInfo = findViewById(R.id.txtLoginInfo);
         info_text_img = findViewById(R.id.info_text);
         mFirebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        mFirebaseStore = FirebaseFirestore.getInstance();
         Window window = this.getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         txtLoginInfo.setOnClickListener(new View.OnClickListener() {
@@ -93,53 +87,44 @@ public class SignUpActivity extends AppCompatActivity {
             edtPassword.requestFocus();
             return;
         }
-        mFirebaseAuth.createUserWithEmailAndPassword(sEmail, sPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    edtEmail.setText("");
-                    edtfullname.setText("");
-                    edtPassword.setText("");
-                    UsersDetailsModel user = new UsersDetailsModel(firebaseUser.getUid(),sFullname,sEmail, "default","offline");
-                    reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).setValue(user)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        custom_progress_dialog.hide();
-                                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
+        try {
+            mFirebaseAuth.createUserWithEmailAndPassword(sEmail, sPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        edtEmail.setText("");
+                        edtfullname.setText("");
+                        edtPassword.setText("");
+                        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                        if (firebaseUser != null) {
+                            uid = firebaseUser.getUid();
+                        }
+                        UsersDetailsModel user = new UsersDetailsModel(uid, sFullname, sEmail, "default", "offline");
+                        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).setValue(user)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            custom_progress_dialog.dismiss();
+                                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
                                     }
-                                }
-
-
-                            });
-//                    mFirebaseStore.collection("Users")
-//                            .add(user)
-//                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                @Override
-//                                public void onSuccess(DocumentReference documentReference) {
-//                                    custom_progress_dialog.hide();
-//                                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Toast.makeText(SignUpActivity.this, "Not able to Register", Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-                } else {
-                    edtEmail.setText("");
-                    edtPassword.setText("");
-                    edtfullname.setText("");
-                    custom_progress_dialog.hide();
-                    Toast.makeText(SignUpActivity.this, "Not able to Register", Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        edtEmail.setText("");
+                        edtPassword.setText("");
+                        edtfullname.setText("");
+                        custom_progress_dialog.hide();
+                        Toast.makeText(SignUpActivity.this, "Not able to Register", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            assert false;
+            e.printStackTrace();
+            Log.d("Account", "Account creation Exception");
+        }
     }
 }
